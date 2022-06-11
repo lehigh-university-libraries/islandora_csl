@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Contains csl.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\csl\Encoder\CslEncoder;
+use Seboettg\CiteProc\StyleSheet;
+use Seboettg\CiteProc\CiteProc;
+use Drupal\islandora\Form\IslandoraSettingsForm;
+
+/**
+ * Implements hook_theme().
+ */
+function csl_theme() {
+  return [
+    'csl' => [
+      'variables' => [
+        'csl' => NULL,
+        'title' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function csl_entity_extra_field_info() {
+  $extra_field = [];
+  $bundles = [
+    // entity_type => [bundle1, bundle2]
+    'node' => [
+      'islandora_object'
+    ]
+  ];
+  foreach ($bundles as $entity_type => $bundles) {
+    foreach ($bundles as $bundle) {
+      $extra_field[$entity_type][$bundle]['display']['field_csl'] = [
+        'label' => t('Citation'),
+        'description' => t('The generated citation'),
+        'weight' => 100,
+        'visible' => TRUE,
+      ];
+    }
+  }
+
+  return $extra_field;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function csl_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $route_match_item = \Drupal::routeMatch()->getParameters()->get($entity->getEntityTypeId());
+  // Ensure the entity matches the route.
+  if ($entity === $route_match_item) {
+    // TODO: if you want other bundles than islandora object, check that here
+    if ($entity->bundle() == 'islandora_object'
+      && $display->getComponent('field_csl')) {
+      $entity_array = $entity->toArray();
+      $csl_str = CslEncoder::encode($entity_array);
+      $csl = [json_decode($csl_str)];
+
+      $style = StyleSheet::loadStyleSheet("modern-language-association");
+      $citeProc = new CiteProc($style);
+      $mla = $citeProc->render($csl, "bibliography");
+
+      $build['field_csl'] = [
+        '#theme' => 'csl',
+        '#title' => "Citation",
+        '#csl' => $mla,
+      ];
+    }
+  }
+}
