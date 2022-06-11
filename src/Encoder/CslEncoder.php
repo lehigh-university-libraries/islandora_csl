@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\csl\Encoder;
+namespace Drupal\islandora_csl\Encoder;
 
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -43,6 +43,7 @@ class CslEncoder implements EncoderInterface {
             if ($author) {
               if ($author->vid->value == 'person') {
                 // assummes format GIVEN [MIDDLE] FAMILY
+                // TODO: improve
                 $components = explode(" ", $author->label());
                 $family = array_pop($components);
                 $given = implode(" ", $components);

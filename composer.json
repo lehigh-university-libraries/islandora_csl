@@ -1,5 +1,5 @@
 {
-    "name": "csl",
+    "name": "islandora_csl",
     "type": "drupal-module",
     "minimum-stability": "dev",
     "repositories": [

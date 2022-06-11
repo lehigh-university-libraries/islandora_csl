@@ -1,5 +1,0 @@
-services:
-  encoder.csl:
-    class: Drupal\csl\Encoder\CslEncoder
-    tags:
-      - { name: encoder, format: csl }
