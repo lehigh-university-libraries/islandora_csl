@@ -1,7 +1,8 @@
 {
-    "name": "islandora_csl",
+    "name": "drupal/islandora_csl",
     "type": "drupal-module",
     "minimum-stability": "dev",
+    "homepage": "https://www.drupal.org/project/islandora_csl",
     "repositories": [
         {
             "type": "package",
