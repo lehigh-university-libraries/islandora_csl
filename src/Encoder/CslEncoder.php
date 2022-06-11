@@ -7,7 +7,7 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;;
 
 /**
- * Crossref format encoder.
+ * CSL format encoder.
  */
 class CslEncoder implements EncoderInterface {
 
@@ -35,7 +35,7 @@ class CslEncoder implements EncoderInterface {
       if (empty($values)) continue;
       switch ($field) {
         case 'title':
-          $result['title'] = $values[0]['value'];
+          $result['title'] = strip_tags($values[0]['value']);
           break;
         case 'field_linked_agent':
           foreach ($values as $value) {
@@ -66,7 +66,8 @@ class CslEncoder implements EncoderInterface {
           break;
         case 'field_edtf_date_issued':
         case 'field_edtf_date':
-          $result['issued']['date-parts'][] = explode('-', $values[0]['value']);
+          $value = strip_tags($values[0]['value']);
+          $result['issued']['date-parts'][] = explode('-', $value);
           break;
         case 'nid':
           $nid = $values[0]['value'];
