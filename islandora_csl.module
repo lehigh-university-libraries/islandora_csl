@@ -5,14 +5,11 @@
  * Contains islandora_csl.module.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\islandora_csl\Encoder\CslEncoder;
 use Seboettg\CiteProc\StyleSheet;
 use Seboettg\CiteProc\CiteProc;
-use Drupal\islandora\Form\IslandoraSettingsForm;
 
 /**
  * Implements hook_theme().
@@ -34,10 +31,10 @@ function islandora_csl_theme() {
 function islandora_csl_entity_extra_field_info() {
   $extra_field = [];
   $bundles = [
-    // entity_type => [bundle1, bundle2]
+    // entity_type => [bundle1, bundle2].
     'node' => [
-      'islandora_object'
-    ]
+      'islandora_object',
+    ],
   ];
   foreach ($bundles as $entity_type => $bundles) {
     foreach ($bundles as $bundle) {
@@ -60,7 +57,7 @@ function islandora_csl_entity_view(array &$build, EntityInterface $entity, Entit
   $route_match_item = \Drupal::routeMatch()->getParameters()->get($entity->getEntityTypeId());
   // Ensure the entity matches the route.
   if ($entity === $route_match_item) {
-    // TODO: if you want other bundles than islandora object, check that here
+    // @todo if you want other bundles than islandora object, check that here.
     if ($entity->bundle() == 'islandora_object'
       && $display->getComponent('field_islandora_csl')) {
       $entity_array = $entity->toArray();

@@ -1,5 +1,6 @@
 name: 'Citation Style Language'
 type: module
+description: 'Generate Citation Style Language citations for islandora repository objects'
 package: 'Custom'
 core_version_requirement: ^8 || ^9
 dependencies:
