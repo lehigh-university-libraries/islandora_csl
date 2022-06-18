@@ -28,6 +28,9 @@ class CslEncoder implements EncoderInterface {
    */
   public function encode($data, $format = '', array $context = []) {
     $result = [];
+    $entityTypeManager = \Drupal::service('entity_type.manager');
+    $nodeStorage = $entityTypeManager->getStorage('node');
+    $termStorage = $entityTypeManager->getStorage('taxonomy_term');
     foreach ($data as $field => $values) {
       if (empty($values)) {
         continue;
@@ -39,7 +42,7 @@ class CslEncoder implements EncoderInterface {
 
         case 'field_linked_agent':
           foreach ($values as $value) {
-            $author = $this->entityTypeManager->getStorage('taxonomy_term')->load($value['target_id']);
+            $author = $termStorage->load($value['target_id']);
             if ($author) {
               if ($author->vid->value == 'person') {
                 // Assummes format GIVEN [MIDDLE] FAMILY.
@@ -62,7 +65,7 @@ class CslEncoder implements EncoderInterface {
           break;
 
         case 'field_publication':
-          $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($values[0]['target_id']);
+          $term = $termStorage->load($values[0]['target_id']);
           if ($term) {
             $result['publisher'] = $term->label();
           }
@@ -76,7 +79,7 @@ class CslEncoder implements EncoderInterface {
 
         case 'nid':
           $nid = $values[0]['value'];
-          $node = $this->nodeStorage->load($nid);
+          $node = $nodeStorage->load($nid);
           if ($node) {
             $result['id'] = $nid;
             $result['URL'] = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
