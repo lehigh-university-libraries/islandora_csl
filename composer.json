@@ -2,35 +2,7 @@
     "name": "drupal/islandora_csl",
     "type": "drupal-module",
     "homepage": "https://www.drupal.org/project/islandora_csl",
-    "repositories": {
-        "csl-locales": {
-            "type": "package",
-            "package": {
-                "name": "citation-style-language/locales",
-                "version": "1.0.0",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/citation-style-language/locales.git",
-                    "reference": "master"
-                }
-            }
-        },
-        "csl-styles": {
-            "type": "package",
-            "package": {
-                "name": "citation-style-language/styles-distribution",
-                "version": "1.0.0",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/citation-style-language/styles-distribution.git",
-                    "reference": "master"
-                }
-            }
-        }
-    },
     "require": {
-        "citation-style-language/locales": "^1.0",
-        "citation-style-language/styles-distribution": "^1.0",
-        "seboettg/citeproc-php": "2.2.5"
+        "seboettg/citeproc-php": "2.6.0"
     }
 }

@@ -61,7 +61,8 @@ function islandora_csl_entity_view(array &$build, EntityInterface $entity, Entit
     if ($entity->bundle() == 'islandora_object'
       && $display->getComponent('field_islandora_csl')) {
       $entity_array = $entity->toArray();
-      $csl_str = CslEncoder::encode($entity_array);
+      $encoder = \Drupal::service('islandora_csl.encoder');
+      $csl_str = $encoder->encode($entity_array);
       $csl = [json_decode($csl_str)];
 
       $style = StyleSheet::loadStyleSheet("modern-language-association");

@@ -1,5 +1,3 @@
 services:
-  encoder.islandora_csl:
+  islandora_csl.encoder:
     class: Drupal\islandora_csl\Encoder\CslEncoder
-    tags:
-      - { name: encoder, format: csl }
