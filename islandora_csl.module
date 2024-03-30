@@ -71,7 +71,7 @@ function islandora_csl_entity_view(array &$build, EntityInterface $entity, Entit
 
       $build['field_islandora_csl'] = [
         '#theme' => 'csl',
-        '#title' => "Citation",
+        '#title' => "",
         '#csl' => $mla,
       ];
     }
