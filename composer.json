@@ -3,6 +3,6 @@
     "type": "drupal-module",
     "homepage": "https://www.drupal.org/project/islandora_csl",
     "require": {
-        "seboettg/citeproc-php": "2.6.0"
+        "seboettg/citeproc-php": "2.6.2"
     }
 }
