@@ -7,7 +7,9 @@
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\islandora_csl\Encoder\CslEncoder;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Seboettg\CiteProc\StyleSheet;
 use Seboettg\CiteProc\CiteProc;
 
@@ -51,6 +53,26 @@ function islandora_csl_entity_extra_field_info() {
 }
 
 /**
+ * Implements hook_entity_base_field_info().
+ */
+function islandora_csl_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() == 'node') {
+    $fields['citation'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Citation (Hidden field for JSON support)'))
+      ->setDescription(t('The computed citation for the entity.'))
+      ->setComputed(TRUE)
+      ->setTranslatable(TRUE)
+      ->setReadOnly(TRUE)
+      ->setTargetEntityTypeId($entity_type->id())
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setClass('\Drupal\islandora_csl\Plugin\Field\FieldType\CitationFieldItemList');
+  }
+
+  return $fields;
+}
+
+/**
  * Implements hook_entity_view().
  */
 function islandora_csl_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -71,7 +93,7 @@ function islandora_csl_entity_view(array &$build, EntityInterface $entity, Entit
 
       $build['field_islandora_csl'] = [
         '#theme' => 'csl',
-        '#title' => "",
+        '#title' => "Citation",
         '#csl' => $mla,
       ];
     }
