@@ -36,8 +36,8 @@ class CslEncoder implements EncoderInterface {
         continue;
       }
       switch ($field) {
-        case 'title':
-          $result['title'] = strip_tags($values[0]['value']);
+        case 'field_full_title':
+          $result['title'] = $values[0]['value'];
           break;
 
         case 'field_linked_agent':
@@ -87,7 +87,8 @@ class CslEncoder implements EncoderInterface {
           $node = $nodeStorage->load($nid);
           if ($node) {
             $result['id'] = $nid;
-            $result['URL'] = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+            $url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+            $result['URL'] = "<a href=\"$url\">$url</a>";
           }
           break;
       }

@@ -18,7 +18,7 @@ class CitationFieldItemList extends FieldItemList {
    * {@inheritdoc}
    */
   protected function computeValue() {
-  
+
     $encoder = \Drupal::service('islandora_csl.encoder');
     $node = $this->getEntity();
     $fields = $node->getFields();
@@ -38,7 +38,29 @@ class CitationFieldItemList extends FieldItemList {
     $citeProc = new CiteProc($style);
     $mla = $citeProc->render($csl, "bibliography");
 
-    $this->list[0] = $this->createItem(0, trim(strip_tags($mla, "<i>")));
+    $mla = $this->removeDivTags($mla);
 
+    $this->list[0] = $this->createItem(0, $mla);
   }
+
+  /**
+   * Helper function to remove <div> tags from a string.
+   */
+  private function removeDivTags($html) {
+    $dom = new \DOMDocument();
+    @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $xpath = new \DOMXPath($dom);
+
+    // Find and remove <div class="csl-bib-body"> and <div class="csl-entry">
+    $divs = $xpath->query('//div[@class="csl-bib-body"] | //div[@class="csl-entry"]');
+    foreach ($divs as $div) {
+      while ($div->firstChild) {
+        $div->parentNode->insertBefore($div->firstChild, $div);
+      }
+      $div->parentNode->removeChild($div);
+    }
+
+    return trim($dom->saveHTML());
+  }
+
 }
