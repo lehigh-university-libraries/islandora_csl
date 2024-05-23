@@ -31,7 +31,7 @@ class CitationFieldItemList extends FieldItemList {
     }
 
     // create the citation
-    $csl_str = $encoder->encode($entity_array);
+    $csl_str = $encoder->encode($entity_array, 'link');
     $csl = [json_decode($csl_str)];
 
     $style = StyleSheet::loadStyleSheet("modern-language-association");

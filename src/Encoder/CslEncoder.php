@@ -75,7 +75,24 @@ class CslEncoder implements EncoderInterface {
             $result['publisher'] = $term->label();
           }
           break;
-
+        case 'field_identifier':
+          foreach ($values as $value) {
+            if (!empty($value['attr0']) && $value['attr0'] == 'doi') {
+              $result['DOI'] = substr($value['value'], strpos($value['value'], '10.'));
+              $result['DOI'] = substr($result['DOI'], 0, strpos($result['DOI'], '"'));
+            }
+          }
+          break;
+        case 'field_part_detail':
+          foreach ($values as $value) {
+            if (!empty($value['type']) && $value['type'] == 'volume') {
+              $result['volume'] = $value['number'];
+            }
+            if (!empty($value['type']) && $value['type'] == 'issue') {
+              $result['issue'] = $value['number'];
+            }
+          }
+          break;
         case 'field_edtf_date_issued':
         case 'field_edtf_date':
           $value = strip_tags($values[0]['value']);
@@ -87,8 +104,14 @@ class CslEncoder implements EncoderInterface {
           $node = $nodeStorage->load($nid);
           if ($node) {
             $result['id'] = $nid;
+
             $url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
-            $result['URL'] = "<a href=\"$url\">$url</a>";
+            if ($format == '') {
+              $result['URL'] = $url;
+            }
+            else {
+              $result['URL'] = "<a href=\"$url\">$url</a>";
+            }
           }
           break;
       }
