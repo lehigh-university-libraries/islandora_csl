@@ -42,6 +42,9 @@ class CslEncoder implements EncoderInterface {
 
         case 'field_linked_agent':
           foreach ($values as $value) {
+            if (!in_array($value['rel_type'], ['relators:cre', 'relators:aut'])) {
+              continue;
+            }
             $author = $termStorage->load($value['target_id']);
             if ($author) {
               if ($author->vid->value == 'person') {
