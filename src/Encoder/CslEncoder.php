@@ -2,6 +2,7 @@
 
 namespace Drupal\islandora_csl\Encoder;
 
+use Drupal\controlled_access_terms\EDTFUtils;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 
 /**
@@ -98,7 +99,8 @@ class CslEncoder implements EncoderInterface {
           break;
         case 'field_edtf_date_issued':
         case 'field_edtf_date':
-          $value = strip_tags($values[0]['value']);
+          $value = EDTFUtils::iso8601Value($values[0]['value']);
+          $value = explode('T', $value)[0];
           $result['issued']['date-parts'][] = explode('-', $value);
           break;
 

@@ -4,4 +4,5 @@ description: 'Generate Citation Style Language citations for islandora repositor
 package: 'Custom'
 core_version_requirement: ^10
 dependencies:
-  -islandora:islandora
+  - islandora:islandora
+  - controlled_access_terms:controlled_access_terms
