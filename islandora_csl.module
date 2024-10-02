@@ -64,6 +64,9 @@ function islandora_csl_entity_base_field_info(EntityTypeInterface $entity_type) 
       ->setComputed(TRUE)
       ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
+      ->setSettings([
+        'max_length' => 4096
+      ])
       ->setTargetEntityTypeId($entity_type->id())
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setClass('\Drupal\islandora_csl\Plugin\Field\FieldType\CitationFieldItemList');

@@ -48,14 +48,16 @@ class CslEncoder implements EncoderInterface {
             }
             $author = $termStorage->load($value['target_id']);
             if ($author) {
-              if ($author->vid->value == 'person') {
+              $label = explode(' - ', $author->label());
+              $label = $label[0];
+              if ($author->bundle() == 'person') {
                 if (strpos($author->label(), ",") === FALSE) {
-                  $components = explode(" ", $author->label());
+                  $components = explode(" ", $label);
                   $family = array_pop($components);
                   $given = implode(" ", $components);
                 }
                 else {
-                  $components = explode(",", $author->label());
+                  $components = explode(",", $label);
                   $family = array_shift($components);
                   $given = implode(" ", $components);
                 }
@@ -66,7 +68,7 @@ class CslEncoder implements EncoderInterface {
               }
               else {
                 $result['author'][] = [
-                  'family' => $author->label(),
+                  'family' => $label,
                 ];
               }
             }
