@@ -43,6 +43,9 @@ class CslEncoder implements EncoderInterface {
 
         case 'field_linked_agent':
           foreach ($values as $value) {
+            if (empty($value['rel_type'])) {
+              continue;
+            }
             if (!in_array($value['rel_type'], ['relators:cre', 'relators:aut'])) {
               continue;
             }
@@ -101,6 +104,9 @@ class CslEncoder implements EncoderInterface {
           break;
         case 'field_edtf_date_issued':
         case 'field_edtf_date':
+          if (empty($values[0]['value'])) {
+            break;
+          }
           $value = EDTFUtils::iso8601Value($values[0]['value']);
           $value = explode('T', $value)[0];
           $result['issued']['date-parts'][] = explode('-', $value);
