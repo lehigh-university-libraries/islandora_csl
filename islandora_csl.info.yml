@@ -2,7 +2,7 @@ name: 'Citation Style Language'
 type: module
 description: 'Generate Citation Style Language citations for islandora repository objects'
 package: 'Custom'
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - islandora:islandora
   - controlled_access_terms:controlled_access_terms
