@@ -1,0 +1,6 @@
+islandora_csl.settings:
+  title: 'Citation Style Language'
+  description: 'Configure citation rendering settings.'
+  route_name: islandora_csl.settings
+  parent: system.admin_config_islandora
+  weight: 10

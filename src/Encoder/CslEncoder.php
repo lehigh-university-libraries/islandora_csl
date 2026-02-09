@@ -3,6 +3,7 @@
 namespace Drupal\islandora_csl\Encoder;
 
 use Drupal\controlled_access_terms\EDTFUtils;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 
 /**
@@ -13,25 +14,41 @@ class CslEncoder implements EncoderInterface {
   /**
    * The format that this encoder supports.
    *
-   * @var array
+   * @var string
    */
   protected static $format = 'csl';
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * Constructs a CslEncoder object.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function supportsEncoding(string $format) : bool {
+  public function supportsEncoding(string $format): bool {
     return $format === self::$format;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function encode(mixed $data, string $format = '', array $context = []) : string {
+  public function encode(mixed $data, string $format = '', array $context = []): string {
     $result = ['type' => 'journal-article'];
-    $entityTypeManager = \Drupal::service('entity_type.manager');
-    $nodeStorage = $entityTypeManager->getStorage('node');
-    $termStorage = $entityTypeManager->getStorage('taxonomy_term');
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
     foreach ($data as $field => $values) {
       if (empty($values)) {
         continue;
@@ -84,6 +101,7 @@ class CslEncoder implements EncoderInterface {
             $result['publisher'] = $term->label();
           }
           break;
+
         case 'field_identifier':
           foreach ($values as $value) {
             if (!empty($value['attr0']) && $value['attr0'] == 'doi') {
@@ -92,6 +110,7 @@ class CslEncoder implements EncoderInterface {
             }
           }
           break;
+
         case 'field_part_detail':
           foreach ($values as $value) {
             if (!empty($value['type']) && $value['type'] == 'volume') {
@@ -102,6 +121,7 @@ class CslEncoder implements EncoderInterface {
             }
           }
           break;
+
         case 'field_edtf_date_issued':
         case 'field_edtf_date':
           if (empty($values[0]['value'])) {

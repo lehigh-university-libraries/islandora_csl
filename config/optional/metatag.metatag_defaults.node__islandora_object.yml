@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.islandora_object
+  module:
+    - node
+id: node__islandora_object
+label: 'Content: Islandora Object'
+tags:
+  schema_scholarly_article_type: ScholarlyArticle
+  schema_scholarly_article_name: '[node:field_full_title]'
+  schema_scholarly_article_description: '[node:field_abstract]'
+  schema_scholarly_article_author: '[islandora_csl:csl-authors-structured]'
+  schema_scholarly_article_date_published: '[islandora_csl:csl-date-issued]'
+  schema_scholarly_article_publisher: '[node:field_publisher]'
+  schema_scholarly_article_identifier: '[islandora_csl:csl-doi]'
+  schema_scholarly_article_url: '[node:url]'
+  schema_scholarly_article_image: '[islandoratokens:media-thumbnail-image:url]'
+  schema_scholarly_article_is_part_of: '[node:field_member_of:entity:title]'

@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Template for client-side citation rendering using citation-js.
+ *
+ * Available variables:
+ * - csl_json: The CSL-JSON data for the citation.
+ * - csl_style: The citation style to use (e.g., 'citation-apa', 'citation-mla').
+ * - title: The field label/title.
+ */
+#}
+<div class="field field--name-field-csl field--type-string field--label-above">
+  <div class="label">
+    {{ title }}
+  </div>
+  <div class="field-values islandora-csl-client" data-csl-json="{{ csl_json|e('html_attr') }}" data-csl-style="{{ csl_style }}">
+    <div class="islandora-csl-output">
+      {# Citation will be rendered here by JavaScript #}
+      <noscript>{{ 'JavaScript is required to display citations.'|t }}</noscript>
+    </div>
+  </div>
+</div>

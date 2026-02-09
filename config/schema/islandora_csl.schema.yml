@@ -1,0 +1,10 @@
+islandora_csl.settings:
+  type: config_object
+  label: 'Islandora CSL settings'
+  mapping:
+    render_mode:
+      type: string
+      label: 'Rendering mode'
+    csl_style:
+      type: string
+      label: 'Citation style for client-side rendering'

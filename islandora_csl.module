@@ -24,6 +24,13 @@ function islandora_csl_theme() {
         'title' => NULL,
       ],
     ],
+    'csl_client' => [
+      'variables' => [
+        'csl_json' => NULL,
+        'csl_style' => 'citation-apa',
+        'title' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -65,7 +72,7 @@ function islandora_csl_entity_base_field_info(EntityTypeInterface $entity_type) 
       ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
       ->setSettings([
-        'max_length' => 4096
+        'max_length' => 4096,
       ])
       ->setTargetEntityTypeId($entity_type->id())
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
@@ -88,17 +95,35 @@ function islandora_csl_entity_view(array &$build, EntityInterface $entity, Entit
       $entity_array = $entity->toArray();
       $encoder = \Drupal::service('islandora_csl.encoder');
       $csl_str = $encoder->encode($entity_array);
-      $csl = [json_decode($csl_str)];
 
-      $style = StyleSheet::loadStyleSheet("modern-language-association");
-      $citeProc = new CiteProc($style);
-      $mla = $citeProc->render($csl, "bibliography");
+      $config = \Drupal::config('islandora_csl.settings');
+      $render_mode = $config->get('render_mode') ?? 'server';
 
-      $build['field_islandora_csl'] = [
-        '#theme' => 'csl',
-        '#title' => "Citation",
-        '#csl' => $mla,
-      ];
+      if ($render_mode === 'client') {
+        // Client-side rendering: pass CSL-JSON to JavaScript.
+        $build['field_islandora_csl'] = [
+          '#theme' => 'csl_client',
+          '#title' => "Citation",
+          '#csl_json' => $csl_str,
+          '#csl_style' => $config->get('csl_style') ?? 'citation-apa',
+          '#attached' => [
+            'library' => ['islandora_csl/citation-js'],
+          ],
+        ];
+      }
+      else {
+        // Server-side rendering: use CiteProc PHP library.
+        $csl = [json_decode($csl_str)];
+        $style = StyleSheet::loadStyleSheet("modern-language-association");
+        $citeProc = new CiteProc($style);
+        $mla = $citeProc->render($csl, "bibliography");
+
+        $build['field_islandora_csl'] = [
+          '#theme' => 'csl',
+          '#title' => "Citation",
+          '#csl' => $mla,
+        ];
+      }
     }
   }
 }

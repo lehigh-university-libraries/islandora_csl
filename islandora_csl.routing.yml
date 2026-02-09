@@ -1,0 +1,7 @@
+islandora_csl.settings:
+  path: '/admin/config/islandora/csl'
+  defaults:
+    _form: '\Drupal\islandora_csl\Form\SettingsForm'
+    _title: 'Citation Style Language Settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -7,7 +7,6 @@ use Drupal\Core\TypedData\ComputedItemListTrait;
 use Seboettg\CiteProc\StyleSheet;
 use Seboettg\CiteProc\CiteProc;
 
-
 /**
  * Defines a computed field item list class for the citation field.
  */
@@ -30,7 +29,7 @@ class CitationFieldItemList extends FieldItemList {
       $entity_array[$field_name] = $field->getValue();
     }
 
-    // create the citation
+    // Create the citation.
     $csl_str = $encoder->encode($entity_array, 'link');
     $csl = [json_decode($csl_str)];
 
@@ -51,7 +50,7 @@ class CitationFieldItemList extends FieldItemList {
     @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     $xpath = new \DOMXPath($dom);
 
-    // Find and remove <div class="csl-bib-body"> and <div class="csl-entry">
+    // Find and remove <div class="csl-bib-body"> and <div class="csl-entry">.
     $divs = $xpath->query('//div[@class="csl-bib-body"] | //div[@class="csl-entry"]');
     foreach ($divs as $div) {
       while ($div->firstChild) {

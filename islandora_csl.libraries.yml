@@ -1,0 +1,13 @@
+citation-js:
+  version: 1.0.0
+  js:
+    https://cdn.jsdelivr.net/npm/citation-js@0.7.22/build/citation.min.js:
+      type: external
+      minified: true
+      attributes:
+        defer: true
+    js/islandora_csl.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once

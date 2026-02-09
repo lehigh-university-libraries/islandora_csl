@@ -1,3 +1,4 @@
 services:
   islandora_csl.encoder:
     class: Drupal\islandora_csl\Encoder\CslEncoder
+    arguments: ['@entity_type.manager']
